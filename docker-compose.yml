@@ -17,6 +17,10 @@ networks:
       driver: default
       config:
         - subnet: fd30:252e:b4f5::/64
+          ip_range: fd30:252e:b4f5:0:1::/80
+          # gateway: fd30:252e:b4f5::1/64
+          # aux_addresses:
+          #   nat64: "fd30:252e:b4f5:0:1::1"
         - subnet: 172.29.0.0/24
           ip_range: 172.29.0.0/24
           gateway: 172.29.0.1
@@ -24,7 +28,8 @@ networks:
 services:
 
   nat64:
-    image: creatordev/docker-nat64
+    build:
+      context: test
     container_name: docker-nat64
     privileged: true
     stdin_open: true
@@ -33,27 +38,27 @@ services:
         ipv4_address: 172.30.0.2
       clients:
         ipv4_address: 172.29.0.2
-        ipv6_address: fd30:252e:b4f5::2/64
+        # ipv6_address: fd30:252e:b4f5::2/64
     environment:
       TAYGA_CONF_IPV4_ADDR: "172.30.1.1"
       TAYGA_CONF_DYNAMIC_POOL: "172.30.1.0/24"
-      TAYGA_CONF_PREFIX: "fd30:252e:b4f5::/64"
-      TAYGA_ROUTER_IPV4: "172.30.0.2"
-      TAYGA_ROUTER_IPV6: "fd30:252e:b4f5::1/64"
+      TAYGA_CONF_PREFIX: "fd9d:aa38:8583::/64"
+      TAYGA_ROUTER_IPV4: "172.30.0.254"
+      TAYGA_ROUTER_IPV6: "fd9d:aa38:8583::1/64"
     # entrypoint: ash
     # command: []
 
-  simple:
-    image: alpine-curl
-    build:
-      context: alpine-curl
-    stdin_open: true
-    entrypoint: ash
-    command: []
-    networks:
-      gwnet: {}
-    depends_on:
-    - nat64
+  # simple:
+  #   image: alpine-curl
+  #   build:
+  #     context: alpine-curl
+  #   stdin_open: true
+  #   entrypoint: ash
+  #   command: []
+  #   networks:
+  #     gwnet: {}
+  #   depends_on:
+  #   - nat64
 
   simple6:
     image: alpine-curl
@@ -62,7 +67,7 @@ services:
       context: alpine-curl
     stdin_open: true
     entrypoint: /set-gateway.sh
-    command: ["172.29.0.2","ash"]
+    command: ["172.29.0.2","fd30:252e:b4f5:0:1::1","ash"]
     networks:
       clients: {}
     depends_on:

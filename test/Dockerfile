@@ -1,1 +1,3 @@
-FROM alpine
+FROM creatordev/docker-nat64
+
+RUN apk add tcpdump

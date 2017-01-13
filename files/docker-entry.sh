@@ -12,13 +12,13 @@ EOD
 
 tayga --mktun
 ip link set nat64 up
-ip addr add $TAYGA_ROUTER_IPV4 dev nat64
-ip addr add $TAYGA_ROUTER_IPV6 dev nat64
+# ip addr add $TAYGA_ROUTER_IPV4 dev nat64
+# ip addr add $TAYGA_ROUTER_IPV6 dev nat64
 ip route add $TAYGA_CONF_DYNAMIC_POOL dev nat64
 ip route add $TAYGA_CONF_PREFIX dev nat64
-tayga
 
-totd -c /etc/totd.conf -no6
+tayga -c /usr/etc/tayga.conf
+totd -c /etc/totd.conf
 
 # forward IPv4
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE

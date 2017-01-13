@@ -12,18 +12,14 @@ RUN mkdir -p /build && \
 		net-tools \
 		iptables
 
-ADD http://www.litech.org/tayga/tayga-0.9.2.tar.bz2 /tmp
-RUN cd /build && \
-	tar xf /tmp/tayga-0.9.2.tar.bz2 && \
-	cd /build/tayga-0.9.2 && \
+ADD dl/tayga-0.9.2.tar.bz2 /build
+RUN cd /build/tayga-0.9.2 && \
 	./configure --prefix=/usr && \
 	make && \
 	make install
 
-ADD https://github.com/fwdillema/totd/archive/1.5.3.tar.gz /tmp/totd-1.5.3.tar.gz
-RUN cd /build && \
-	tar xf /tmp/totd-1.5.3.tar.gz && \
-	cd /build/totd-1.5.3 && \
+ADD dl/totd-1.5.3.tar.gz /build
+RUN cd /build/totd-1.5.3 && \
 	./configure --prefix=/usr && \
 	make && \
 	mkdir -p /usr/man/man8 && \
