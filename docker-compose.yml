@@ -41,9 +41,9 @@ services:
         # ipv6_address: fd30:252e:b4f5::2/64
     environment:
       TAYGA_CONF_IPV4_ADDR: "172.30.1.1"
-      TAYGA_CONF_DYNAMIC_POOL: "172.30.1.0/24"
-      TAYGA_CONF_PREFIX: "fd9d:aa38:8583::/64"
-      TAYGA_ROUTER_IPV4: "172.30.0.254"
+      TAYGA_CONF_DYNAMIC_POOL: "172.28.1.0/24"
+      TAYGA_CONF_PREFIX: "fd9d:aa38:8583::/96"
+      TAYGA_ROUTER_IPV4: "172.28.0.254"
       TAYGA_ROUTER_IPV6: "fd9d:aa38:8583::1/64"
     # entrypoint: ash
     # command: []
@@ -67,7 +67,10 @@ services:
       context: alpine-curl
     stdin_open: true
     entrypoint: /set-gateway.sh
-    command: ["172.29.0.2","fd30:252e:b4f5:0:1::1","ash"]
+    command:
+      - "172.29.0.2"
+      - "fd30:252e:b4f5:0:1::1"
+      - ash
     networks:
       clients: {}
     depends_on:

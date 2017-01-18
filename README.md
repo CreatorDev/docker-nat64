@@ -10,7 +10,12 @@ This is a little docker container to run a IPv6 to IPv4 NAT ("NAT64") system.
 It will be used for automated testing [Contiki](https://github.com/CreatorDev/contiki)
 systems as part of the [Creator System Test Framework](https://github.com/CreatorDev/creator-system-test-framework).
 
-**NB:** It's not quite working yet .. hoping to get a proof-of-concept running.
+## Notes
+
+- The IPv6 prefix length set in Tayga config file is important, this is defined
+  by [RFC6052](https://tools.ietf.org/html/rfc6052). TOTD is passing the IPv4
+  address back in the low-order bytes of the IPv6 address, so you must ensure
+  that Tayga is configured similarly (i.e. `/96`).
 
 ## Credits
 

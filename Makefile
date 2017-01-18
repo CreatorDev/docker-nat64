@@ -2,10 +2,12 @@
 all: image compose-build
 
 .PHONY: run
-run: image
+run: all
 	docker-compose up -d
 
-image docker-clean:
+docker-exec: run
+
+image docker-clean docker-exec:
 	$(MAKE) -C nat64 $@
 
 .PHONY: compose-build

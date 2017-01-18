@@ -21,6 +21,8 @@ ip route add $TAYGA_CONF_PREFIX dev nat64
 tayga -c /usr/etc/tayga.conf
 totd -c /etc/totd.conf
 
+sysctl -w net.ipv6.conf.all.forwarding=1
+
 # forward IPv4
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 # iptables -t filter -P FORWARD DROP

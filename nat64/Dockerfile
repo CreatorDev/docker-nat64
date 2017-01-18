@@ -10,15 +10,17 @@ RUN mkdir -p /build && \
 		linux-headers \
 		make \
 		net-tools \
-		iptables
+		iptables \
+		rsyslog
 
-ADD dl/tayga-0.9.2.tar.bz2 /build
+ADD tayga-0.9.2 /build/tayga-0.9.2
 RUN cd /build/tayga-0.9.2 && \
 	./configure --prefix=/usr && \
 	make && \
 	make install
 
-ADD dl/totd-1.5.3.tar.gz /build
+ADD totd-1.5.3 /build/totd-1.5.3
+ADD files/totd.conf /etc
 RUN cd /build/totd-1.5.3 && \
 	./configure --prefix=/usr && \
 	make && \
@@ -33,11 +35,9 @@ ENV \
 	TAYGA_ROUTER_IPV6=fd30:252e:b4f5::1 \
 	TAYGA_CONF_DATA_DIR=/var/db/tayga
 
-ADD files/totd.conf /etc
 ADD files/docker-entry.sh /
 RUN chmod +x /docker-entry.sh
 
-RUN apk add rsyslog
 ENTRYPOINT ["/docker-entry.sh"]
 CMD ["ash"]
 
