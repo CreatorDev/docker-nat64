@@ -37,6 +37,7 @@ ADD files/totd.conf /etc
 ADD files/docker-entry.sh /
 RUN chmod +x /docker-entry.sh
 
+RUN apk add rsyslog
 ENTRYPOINT ["/docker-entry.sh"]
 CMD ["ash"]
 

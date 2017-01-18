@@ -1,5 +1,6 @@
 #!/bin/sh
 
+rsyslogd
 mkdir -p /var/db/tayga
 
 cat >/usr/etc/tayga.conf <<EOD
@@ -10,10 +11,10 @@ dynamic-pool $TAYGA_CONF_DYNAMIC_POOL
 data-dir $TAYGA_CONF_DATA_DIR
 EOD
 
-tayga --mktun
+tayga -c /usr/etc/tayga.conf --mktun
 ip link set nat64 up
-# ip addr add $TAYGA_ROUTER_IPV4 dev nat64
-# ip addr add $TAYGA_ROUTER_IPV6 dev nat64
+ip addr add $TAYGA_ROUTER_IPV4 dev nat64
+ip addr add $TAYGA_ROUTER_IPV6 dev nat64
 ip route add $TAYGA_CONF_DYNAMIC_POOL dev nat64
 ip route add $TAYGA_CONF_PREFIX dev nat64
 
