@@ -3,15 +3,15 @@ FROM alpine
 RUN mkdir -p /build && \
 	apk update && \
 	apk add \
-		abuild \
-		binutils \
-		build-base \
 		gcc \
+		musl-dev \
 		linux-headers \
 		make \
 		net-tools \
-		iptables \
-		rsyslog
+		iptables
+
+# add this to get messages from tayga and totd into /var/log/messages
+#RUN apk add rsyslog
 
 ADD tayga-0.9.2 /build/tayga-0.9.2
 RUN cd /build/tayga-0.9.2 && \
@@ -26,6 +26,14 @@ RUN cd /build/totd-1.5.3 && \
 	make && \
 	mkdir -p /usr/man/man8 && \
 	make install
+
+# we could make things a lot smaller, still got a bunch of layers at the moment
+RUN rm -rf /build && \
+	apk del \
+		gcc \
+		musl-dev \
+		linux-headers \
+		make
 
 ENV \
 	TAYGA_CONF_IPV4_ADDR=192.168.255.1 \

@@ -17,6 +17,11 @@ systems as part of the [Creator System Test Framework](https://github.com/Creato
   address back in the low-order bytes of the IPv6 address, so you must ensure
   that Tayga is configured similarly (i.e. `/96`).
 
+- The `creatordev/docker-nat64` is not being particularly smart with PID1, or
+  restricting IP forwarding etc.  Similarly, it could be a whole bunch smaller.
+  However, since this is only really meant for test systems, we're not too
+  bothered at the moment.
+
 ## Credits
 
 Thanks to the following projects:
