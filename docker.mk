@@ -21,11 +21,13 @@ GIT_ORIGIN_URL:=$(shell git config --get remote.origin.url 2>/dev/null)
 GIT_TAG:=$(shell git describe --tags 2> /dev/null)
 GIT_TAG_VSTRIPPED:=$(patsubst v%,%,$(GIT_TAG))
 
+IMAGE_VERSION_DEFAULT?=latest
+
 ifndef IMAGE_VERSION
 ifneq ("$(GIT_TAG_VSTRIPPED)_","_")
 IMAGE_VERSION:=$(GIT_TAG_VSTRIPPED)
 else
-IMAGE_VERSION:=latest
+IMAGE_VERSION:=$(IMAGE_VERSION_DEFAULT)
 endif
 endif
 
@@ -53,7 +55,7 @@ endif
 #
 # also build image:latest
 #
-IMAGE_LATEST:=$(patsubst %:$(IMAGE_VERSION),%:latest,$(IMAGE_NAME))
+IMAGE_DEFAULT:=$(patsubst %:$(IMAGE_VERSION),%:$(IMAGE_VERSION_DEFAULT),$(IMAGE_NAME))
 
 ifeq ($(DOCKERFILE)x,x)
 DOCKERFILE:=$(wildcard Dockerfile)
@@ -93,13 +95,13 @@ image:
 	$(call PROMPT,docker build)
 	rm -f $(TAR_FILE)
 	docker build --rm --force-rm \
-		-t $(IMAGE_LATEST) \
+		-t $(IMAGE_DEFAULT) \
 		-f $(DOCKERFILE) \
 		$(DOCKER_BUILDARG_VCSREF) \
 		$(DOCKER_BUILDARG_VCSURL) \
 		$(DOCKER_BUILDARG_BUILDDATE) \
 		.
-	[ "$(IMAGE_VERSION)" == "latest" ] || docker tag $(IMAGE_LATEST) $(IMAGE_NAME)
+	[ "$(IMAGE_VERSION)" == "$(IMAGE_VERSION_DEFAULT)" ] || docker tag $(IMAGE_DEFAULT) $(IMAGE_NAME)
 
 .PHONY: clean
 clean::
@@ -109,7 +111,7 @@ clean::
 
 .PHONY: clobber
 clobber:: clean
-	-docker rmi -f $(IMAGE_NAME) $(IMAGE_LATEST) 2> /dev/null
+	-docker rmi -f $(IMAGE_NAME) $(IMAGE_DEFAULT) 2> /dev/null
 
 TAR_FILE:=$(notdir $(subst :,_,$(IMAGE_NAME))).tar
 
@@ -120,14 +122,14 @@ docker-tar:
 	gzip $(TAR_FILE)
 
 #
-# Push both the versioned and the "latest" image. They might be the same thing - but,
+# Push both the versioned and the default "latest" image. They might be the same thing - but,
 # if so, then the second one will complete very quickly.
 #
 .PHONY: docker-push
 docker-push:
 	$(call PROMPT,docker push)
 	docker push $(IMAGE_NAME)
-	docker push $(IMAGE_LATEST)
+	docker push $(IMAGE_DEFAULT)
 
 .PHONY: docker-run
 docker-run: clean

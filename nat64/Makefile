@@ -30,4 +30,4 @@ DOCKER_ORGANISATION:=creatordev
 DOCKER_SHELL:=ash
 CONTAINER_NAME:=docker-nat64
 # DOCKER_BUILDARG_BUILDDATE:=
-include docker.mk
+include ../docker.mk

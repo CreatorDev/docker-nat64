@@ -1,14 +1,19 @@
 .PHONY: all
-all: image compose-build
+all: nat64 client-ubuntu compose-build
 
 .PHONY: run
 run: all
 	docker-compose up -d
 
-docker-exec: run
+.PHONY: nat64 client-ubuntu
+nat64 client-ubuntu:
+	$(MAKE) -C $@ image
 
-image docker-clean docker-exec:
+.PHONY: docker-clean docker-exec
+docker-clean docker-exec:
 	$(MAKE) -C nat64 $@
+
+docker-exec: run
 
 .PHONY: compose-build
 compose-build:
