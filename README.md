@@ -10,6 +10,8 @@ This is a little docker container to run a IPv6 to IPv4 NAT ("NAT64") system.
 It will be used for automated testing [Contiki](https://github.com/CreatorDev/contiki)
 systems as part of the [Creator System Test Framework](https://github.com/CreatorDev/creator-system-test-framework).
 
+![network diagram](doc/network.png)
+
 ## Notes
 
 - The IPv6 prefix length set in Tayga config file is important, this is defined
@@ -21,6 +23,11 @@ systems as part of the [Creator System Test Framework](https://github.com/Creato
   restricting IP forwarding etc.  Similarly, it could be a whole bunch smaller.
   However, since this is only really meant for test systems, we're not too
   bothered at the moment.
+
+- There's currently some hardcoding of routes from the nat64 container to the client
+  container, although this should only affect clients using TAP devices. This can
+  probably be resolved/removed through the use of router announcements, but there's
+  a little work required to get that running.
 
 ## Credits
 

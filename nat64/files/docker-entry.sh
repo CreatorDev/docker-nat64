@@ -23,6 +23,8 @@ totd -c /etc/totd.conf
 
 sysctl -w net.ipv6.conf.all.forwarding=1
 
+ip -6 route add $CLIENT1_TAP_PREFIX via $CLIENT1_IPV6 dev eth1
+
 # forward IPv4
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 # iptables -t filter -P FORWARD DROP

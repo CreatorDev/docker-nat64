@@ -30,7 +30,6 @@ services:
   nat64:
     build:
       context: test
-    container_name: docker-nat64
     privileged: true
     stdin_open: true
     networks:
@@ -39,28 +38,17 @@ services:
       clients:
         ipv4_address: 172.29.0.2
         # ipv6_address: fd30:252e:b4f5::2/64
-    environment:
-      TAYGA_CONF_IPV4_ADDR: "172.30.1.1"
-      TAYGA_CONF_DYNAMIC_POOL: "172.28.1.0/24"
-      TAYGA_CONF_PREFIX: "fd9d:aa38:8583::/96"
-      TAYGA_ROUTER_IPV4: "172.28.0.254"
-      TAYGA_ROUTER_IPV6: "fd9d:aa38:8583::1/64"
-    # entrypoint: ash
-    # command: []
 
-  # simple:
-  #   image: alpine-curl
-  #   build:
-  #     context: alpine-curl
-  #   stdin_open: true
-  #   entrypoint: ash
-  #   command: []
-  #   networks:
-  #     gwnet: {}
-  #   depends_on:
-  #   - nat64
+  ubuntu:
+    image: creatordev/docker-nat64-client
+    privileged: true
+    stdin_open: true
+    networks:
+      clients: {}
+    depends_on:
+    - nat64
 
-  simple6:
+  alpine:
     image: alpine-curl
     privileged: true
     build:
@@ -75,3 +63,4 @@ services:
       clients: {}
     depends_on:
     - nat64
+    - ubuntu # just to make IP addresses correct for the fdfd:: routing <cough>

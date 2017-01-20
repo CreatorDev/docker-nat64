@@ -35,13 +35,16 @@ RUN rm -rf /build && \
 		linux-headers \
 		make
 
+# beware .. totd.conf should match TAYGA_CONF_PREFIX
 ENV \
-	TAYGA_CONF_IPV4_ADDR=192.168.255.1 \
-	TAYGA_CONF_DYNAMIC_POOL=192.168.255.0/24 \
-	TAYGA_ROUTER_IPV4=192.168.0.1 \
-	TAYGA_CONF_PREFIX=fd30:252e:b4f5:ffff::/96 \
-	TAYGA_ROUTER_IPV6=fd30:252e:b4f5::1 \
-	TAYGA_CONF_DATA_DIR=/var/db/tayga
+	TAYGA_CONF_DATA_DIR=/var/db/tayga \
+	TAYGA_CONF_IPV4_ADDR=172.30.1.1 \
+	TAYGA_CONF_DYNAMIC_POOL=172.28.1.0/24 \
+	TAYGA_CONF_PREFIX=fd9d:aa38:64::/96 \
+	TAYGA_ROUTER_IPV4=172.28.0.254 \
+	TAYGA_ROUTER_IPV6=fd9d:aa38:64::1/64 \
+	CLIENT1_TAP_PREFIX=fdfd::/64 \
+	CLIENT1_IPV6=fd30:252e:b4f5:0:1::2
 
 ADD files/docker-entry.sh /
 RUN chmod +x /docker-entry.sh
